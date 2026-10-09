@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spill Produk Affiliate - Link in Bio</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f8f9fa; padding: 20px 15px; max-width: 500px; margin: auto; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 { color: #ee4d2d; font-size: 24px; font-weight: 700; }
+        .header p { color: #666; font-size: 14px; margin-top: 5px; }
+        
+        .search-box {
+            width: 100%; padding: 12px 18px; border: 2px solid #ee4d2d;
+            border-radius: 25px; font-size: 15px; outline: none;
+            margin-bottom: 20px; box-shadow: 0 4px 10px rgba(238, 77, 45, 0.1);
+        }
+
+        .product-card {
+            background: white; border-radius: 12px; padding: 15px; margin-bottom: 12px;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: transform 0.2s;
+        }
+        .product-card:hover { transform: translateY(-2px); }
+        .badge {
+            background: #ee4d2d; color: white; font-weight: bold; font-size: 13px;
+            padding: 6px 10px; border-radius: 8px; margin-right: 12px; flex-shrink: 0;
+        }
+        .info { flex-grow: 1; padding-right: 10px; }
+        .title { font-size: 14px; color: #333; font-weight: 600; line-height: 1.3; }
+        .btn-buy {
+            background: #28a745; color: white; text-decoration: none;
+            padding: 8px 16px; border-radius: 20px; font-weight: bold;
+            font-size: 13px; flex-shrink: 0; transition: background 0.2s;
+        }
+        .btn-buy:hover { background: #218838; }
+        .loading { text-align: center; color: #888; padding: 30px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🛍️ Spill Produk Rekomendasi</h1>
+        <p>Cari nomor produk sesuai yang ada di caption/video!</p>
+    </div>
+
+    <input type="text" id="search" class="search-box" placeholder="🔍 Ketik nomor produk (misal: 1)..." onkeyup="filterProducts()">
+
+    <div id="product-container">
+        <div class="loading">Memuat daftar produk...</div>
+    </div>
+
+    <script>
+        // MASUKKAN ID SPREADSHEET KAMU DI SINI
+        const SPREADSHEET_ID = "1a2b3c4d5e6f7g8h9i0j";
+        const URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json`;
+
+        async function loadProducts() {
+            try {
+                const response = await fetch(URL);
+                const text = await response.text();
+                const json = JSON.parse(text.substr(47).slice(0, -2));
+                const rows = json.table.rows;
+
+                let html = "";
+                // Skip header (i = 1)
+                for (let i = 1; i < rows.length; i++) {
+                    const row = rows[i].c;
+                    const no = row[0] ? row[0].v : "";
+                    const caption1 = row[1] ? row[1].v : "";
+                    const caption2 = row[2] ? row[2].v : "";
+                    const linkAffiliate = row[3] ? row[3].v : "#";
+
+                    // Ambil nama judul singkat dari caption
+                    let title = caption1 || "Rekomendasi Produk Pilihan";
+                    if (title.length > 50) title = title.substring(0, 50) + "...";
+
+                    html += `
+                        <div class="product-card" data-no="${no}" data-title="${title.toLowerCase()}">
+                            <span class="badge">NO. ${no}</span>
+                            <div class="info">
+                                <div class="title">${title}</div>
+                            </div>
+                            <a href="${linkAffiliate}" target="_blank" class="btn-buy">Beli</a>
+                        </div>
+                    `;
+                }
+                document.getElementById("product-container").innerHTML = html;
+            } catch (err) {
+                document.getElementById("product-container").innerHTML = "<div class='loading'>Gagal memuat produk. Pastikan Google Sheets sudah dipublikasikan.</div>";
+            }
+        }
+
+        function filterProducts() {
+            const query = document.getElementById("search").value.toLowerCase().trim();
+            const cards = document.querySelectorAll(".product-card");
+
+            cards.forEach(card => {
+                const no = card.getAttribute("data-no").toString();
+                const title = card.getAttribute("data-title");
+
+                if (no === query || title.includes(query) || query === "") {
+                    card.style.display = "flex";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
+
+        loadProducts();
+    </script>
+</body>
+</html>
