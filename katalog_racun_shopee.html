@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Rekomendasi Produk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f6f6f6;
+            color: #222222;
+        }
+        /* Custom scrollbar hiding for horizontal category pills */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="pb-12">
+
+    <!-- Sticky Shopee-themed Header -->
+    <header class="sticky top-0 z-50 bg-gradient-to-br from-[#ee4d2d] to-[#ff7337] text-white py-5 px-4 text-center shadow-md">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-xl sm:text-2xl font-bold tracking-tight mb-1">✨ Katalog Racun Shopee ✨</h1>
+            <p class="text-xs sm:text-sm opacity-95">Ketik nomor produk atau nama barang di kolom pencarian</p>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-4 pt-5">
+        
+        <!-- Search & Category Controls -->
+        <div class="flex flex-col gap-3 mb-4">
+            <div class="relative">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm sm:text-base shadow-sm focus:outline-none focus:border-[#ee4d2d] focus:ring-2 focus:ring-[#ee4d2d]/20 transition-all"
+                    placeholder="Cari nomor (misal: 25) atau nama produk..."
+                >
+                <button 
+                    id="clearSearchBtn" 
+                    class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs font-medium bg-gray-100 px-2.5 py-1 rounded-lg"
+                >
+                    Reset
+                </button>
+            </div>
+
+            <!-- Category Filter Pills -->
+            <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1" id="categoryBar">
+                <button class="cat-btn active px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-[#ee4d2d] text-white border border-[#ee4d2d] whitespace-nowrap transition-all cursor-pointer" data-cat="ALL">
+                    Semua
+                </button>
+                <button class="cat-btn px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium bg-white text-gray-700 border border-gray-200 hover:border-[#ee4d2d] whitespace-nowrap transition-all cursor-pointer" data-cat="Atasan">
+                    Atasan
+                </button>
+                <button class="cat-btn px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium bg-white text-gray-700 border border-gray-200 hover:border-[#ee4d2d] whitespace-nowrap transition-all cursor-pointer" data-cat="Bawahan">
+                    Bawahan
+                </button>
+                <button class="cat-btn px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium bg-white text-gray-700 border border-gray-200 hover:border-[#ee4d2d] whitespace-nowrap transition-all cursor-pointer" data-cat="Aksesoris">
+                    Aksesoris
+                </button>
+                <button class="cat-btn px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium bg-white text-gray-700 border border-gray-200 hover:border-[#ee4d2d] whitespace-nowrap transition-all cursor-pointer" data-cat="Lainnya">
+                    Lainnya
+                </button>
+            </div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="text-xs sm:text-sm text-gray-500 mb-3 font-medium" id="statusBar">
+            Memuat katalog produk...
+        </div>
+
+        <!-- Responsive Product Grid: 2 cols mobile, 3 cols tablet, 4 cols desktop -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4" id="productGrid">
+            <!-- Product cards injected via JS -->
+        </div>
+
+        <!-- Load More Button -->
+        <div class="text-center mt-7">
+            <button 
+                id="loadMoreBtn" 
+                class="hidden bg-white border border-[#ee4d2d] text-[#ee4d2d] hover:bg-[#ee4d2d] hover:text-white px-6 py-2.5 rounded-xl text-sm font-semibold shadow-sm transition-all cursor-pointer"
+            >
+                Tampilkan Lebih Banyak
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Custom Notification Toast for Preview Link Click -->
+    <div id="toastNotification" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs sm:text-sm px-4 py-3 rounded-xl shadow-lg opacity-0 pointer-events-none transition-opacity duration-300 z-50 text-center max-w-xs sm:max-w-md">
+    </div>
+
+    <script>
+        // Mock sample data embedded directly for instant live preview
+        const MOCK_PRODUCTS = [
+            {
+                no: 2,
+                category: "Atasan",
+                product_title: "Sakura Vneck Shirt Blouse Kemeja Wanita Korean Style Adem",
+                product_image: "https://placehold.co/500x500/fff1ee/ee4d2d?text=No.+2%0ASakura+Vneck+Shirt",
+                affiliate_link: "https://s.shopee.co.id/mock-sakura-shirt"
+            },
+            {
+                no: 3,
+                category: "Bawahan",
+                product_title: "Rok Plisket Premium Highwaist Mayung Tebal Tidak Menerawang",
+                product_image: "https://placehold.co/500x500/fdf2f8/db2777?text=No.+3%0ARok+Plisket+Premium",
+                affiliate_link: "https://s.shopee.co.id/mock-rok-plisket"
+            },
+            {
+                no: 4,
+                category: "Aksesoris",
+                product_title: "Kalung Titanium Anti Karat Minimalis Liontin Clover Estetik",
+                product_image: "https://placehold.co/500x500/fefce8/ca8a04?text=No.+4%0AKalung+Titanium",
+                affiliate_link: "https://s.shopee.co.id/mock-kalung-titanium"
+            },
+            {
+                no: 5,
+                category: "Aksesoris",
+                product_title: "Tas Selempang Wanita Estetik Bahu Kekinian Bahan Kulit Sintetis",
+                product_image: "https://placehold.co/500x500/f3f4f6/374151?text=No.+5%0ATas+Selempang+Estetik",
+                affiliate_link: "https://s.shopee.co.id/mock-tas-selempang"
+            },
+            {
+                no: 6,
+                category: "Atasan",
+                product_title: "Kaos Oversize Katun Combed 24s Lengan Panjang Polos Nyaman",
+                product_image: "https://placehold.co/500x500/eff6ff/2563eb?text=No.+6%0AKaos+Oversize+Combed",
+                affiliate_link: "https://s.shopee.co.id/mock-kaos-oversize"
+            },
+            {
+                no: 7,
+                category: "Bawahan",
+                product_title: "Celana Kulot Scuba Highwaist Jahitan Tulang Depan Jenjang",
+                product_image: "https://placehold.co/500x500/f0fdf4/16a34a?text=No.+7%0ACelana+Kulot+Scuba",
+                affiliate_link: "https://s.shopee.co.id/mock-celana-kulot"
+            },
+            {
+                no: 8,
+                category: "Lainnya",
+                product_title: "Organizer Meja Estetik Multifungsi Laci Skincare & Kosmetik",
+                product_image: "https://placehold.co/500x500/faf5ff/9333ea?text=No.+8%0AOrganizer+Meja+Estetik",
+                affiliate_link: "https://s.shopee.co.id/mock-organizer-meja"
+            },
+            {
+                no: 12,
+                category: "Atasan",
+                product_title: "Cardigan Rajut Crop Top Knitwear Korean Style Lembut",
+                product_image: "https://placehold.co/500x500/fff7ed/ea580c?text=No.+12%0ACardigan+Rajut+Crop",
+                affiliate_link: "https://s.shopee.co.id/mock-cardigan-rajut"
+            },
+            {
+                no: 18,
+                category: "Aksesoris",
+                product_title: "Jam Tangan Wanita Rantai Pasir Magnet Dial Kecil Elegan",
+                product_image: "https://placehold.co/500x500/f8fafc/475569?text=No.+18%0AJam+Tangan+Wanita",
+                affiliate_link: "https://s.shopee.co.id/mock-jam-tangan"
+            },
+            {
+                no: 25,
+                category: "Bawahan",
+                product_title: "Celana Jeans Highwaist Loose Kulot Wanita Wash Snow Blue",
+                product_image: "https://placehold.co/500x500/ecfeff/0891b2?text=No.+25%0AJeans+Highwaist+Loose",
+                affiliate_link: "https://s.shopee.co.id/mock-jeans-highwaist"
+            },
+            {
+                no: 32,
+                category: "Lainnya",
+                product_title: "Botol Minum Estetik 1 Liter Sedotan BPA Free Gradient",
+                product_image: "https://placehold.co/500x500/fdf4ff/c026d3?text=No.+32%0ABotol+Minum+Estetik",
+                affiliate_link: "https://s.shopee.co.id/mock-botol-minum"
+            },
+            {
+                no: 40,
+                category: "Atasan",
+                product_title: "Tunik Linen Crinkle Airflow Polos Lengan Kancing Busui Friendly",
+                product_image: "https://placehold.co/500x500/fef2f2/dc2626?text=No.+40%0ATunik+Linen+Crinkle",
+                affiliate_link: "https://s.shopee.co.id/mock-tunik-linen"
+            },
+            {
+                no: 45,
+                category: "Aksesoris",
+                product_title: "Anting Tusuk Mutiara Korea Set 6 Pasang Elegan",
+                product_image: "https://placehold.co/500x500/fffbeb/d97706?text=No.+45%0AAnting+Mutiara+Korea",
+                affiliate_link: "https://s.shopee.co.id/mock-anting-mutiara"
+            },
+            {
+                no: 52,
+                category: "Bawahan",
+                product_title: "Rok Span Rajut Belah Belakang Rib Knit Tebal Melar",
+                product_image: "https://placehold.co/500x500/f3e8ff/7e22ce?text=No.+52%0ARok+Span+Rajut",
+                affiliate_link: "https://s.shopee.co.id/mock-rok-span"
+            }
+        ];
+
+        let allProducts = [];
+        let filteredProducts = [];
+        let currentCategory = "ALL";
+        let visibleCount = 8; // Set to 8 initially in preview so "Tampilkan Lebih Banyak" button can be tested
+        const STEP = 8;
+
+        const searchInput = document.getElementById("searchInput");
+        const clearSearchBtn = document.getElementById("clearSearchBtn");
+        const productGrid = document.getElementById("productGrid");
+        const statusBar = document.getElementById("statusBar");
+        const loadMoreBtn = document.getElementById("loadMoreBtn");
+        const categoryBar = document.getElementById("categoryBar");
+        const toastNotification = document.getElementById("toastNotification");
+
+        let toastTimer = null;
+
+        function showToast(message) {
+            toastNotification.textContent = message;
+            toastNotification.classList.remove("opacity-0");
+            toastNotification.classList.add("opacity-100");
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toastNotification.classList.remove("opacity-100");
+                toastNotification.classList.add("opacity-0");
+            }, 3000);
+        }
+
+        async function loadCatalog() {
+            try {
+                // Try fetching external products.json if hosted alongside it; fallback to MOCK_PRODUCTS
+                const response = await fetch("products.json?v=" + new Date().getTime());
+                if (response.ok) {
+                    allProducts = await response.json();
+                } else {
+                    allProducts = MOCK_PRODUCTS;
+                }
+            } catch (err) {
+                allProducts = MOCK_PRODUCTS;
+            }
+
+            // Support direct URL parameter like ?no=25
+            const urlParams = new URLSearchParams(window.location.search);
+            const noParam = urlParams.get("no");
+            if (noParam) {
+                searchInput.value = noParam;
+            }
+
+            applyFilter();
+        }
+
+        function applyFilter() {
+            const keyword = searchInput.value.trim().toLowerCase();
+            visibleCount = STEP;
+
+            if (keyword.length > 0) {
+                clearSearchBtn.classList.remove("hidden");
+            } else {
+                clearSearchBtn.classList.add("hidden");
+            }
+
+            filteredProducts = allProducts.filter(item => {
+                const matchCat = currentCategory === "ALL" || item.category === currentCategory;
+                if (!matchCat) return false;
+
+                if (!keyword) return true;
+
+                const itemNo = String(item.no);
+                const itemTitle = (item.product_title || "").toLowerCase();
+                return itemNo === keyword || itemNo.includes(keyword) || itemTitle.includes(keyword);
+            });
+
+            // Prioritize exact number match at the very top
+            if (/^\d+$/.test(keyword)) {
+                filteredProducts.sort((a, b) => {
+                    if (String(a.no) === keyword) return -1;
+                    if (String(b.no) === keyword) return 1;
+                    return a.no - b.no;
+                });
+            }
+
+            renderProducts();
+        }
+
+        function renderProducts() {
+            productGrid.innerHTML = "";
+            const slice = filteredProducts.slice(0, visibleCount);
+
+            statusBar.textContent = `Menampilkan ${slice.length} dari ${filteredProducts.length} produk`;
+
+            if (slice.length === 0) {
+                productGrid.innerHTML = `
+                    <div class="col-span-full text-center py-12 px-4 bg-white rounded-xl border border-gray-200 text-gray-500 text-sm">
+                        Produk tidak ditemukan. Coba kata kunci atau nomor lain.
+                    </div>
+                `;
+                loadMoreBtn.classList.add("hidden");
+                return;
+            }
+
+            slice.forEach(item => {
+                const card = document.createElement("div");
+                card.className = "bg-white rounded-xl overflow-hidden flex flex-col shadow-sm hover:-translate-y-0.5 hover:shadow-md transition-all duration-150 relative border border-gray-100";
+
+                card.innerHTML = `
+                    <div class="absolute top-2 left-2 bg-black/75 backdrop-blur-xs text-white text-xs font-bold px-2.5 py-1 rounded-md z-10">
+                        No. ${item.no}
+                    </div>
+                    <div class="w-full aspect-square bg-gray-100 overflow-hidden relative">
+                        <img 
+                            src="${item.product_image}" 
+                            alt="No. ${item.no}" 
+                            loading="lazy" 
+                            class="w-full h-full object-cover block"
+                            onerror="this.src='https://placehold.co/400x400/f3f4f6/6b7280?text=No.+${item.no}'"
+                        >
+                    </div>
+                    <div class="p-3 flex flex-col flex-grow justify-between gap-2.5">
+                        <div>
+                            <div class="text-[11px] text-[#ee4d2d] font-bold uppercase tracking-wide mb-1">
+                                ${escapeHtml(item.category || "Produk")}
+                            </div>
+                            <h2 class="text-xs sm:text-sm font-medium text-gray-800 leading-snug line-clamp-2">
+                                ${escapeHtml(item.product_title)}
+                            </h2>
+                        </div>
+                        <a 
+                            href="${item.affiliate_link}" 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            data-no="${item.no}"
+                            class="buy-btn block w-full text-center bg-[#ee4d2d] hover:bg-[#d73211] text-white py-2 px-3 rounded-lg text-xs sm:text-sm font-semibold transition-colors"
+                        >
+                            Beli di Shopee ➔
+                        </a>
+                    </div>
+                `;
+                productGrid.appendChild(card);
+            });
+
+            if (visibleCount < filteredProducts.length) {
+                loadMoreBtn.classList.remove("hidden");
+            } else {
+                loadMoreBtn.classList.add("hidden");
+            }
+        }
+
+        function escapeHtml(str) {
+            return String(str || "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;");
+        }
+
+        searchInput.addEventListener("input", applyFilter);
+
+        clearSearchBtn.addEventListener("click", () => {
+            searchInput.value = "";
+            applyFilter();
+            searchInput.focus();
+        });
+
+        categoryBar.addEventListener("click", (e) => {
+            const btn = e.target.closest(".cat-btn");
+            if (!btn) return;
+
+            document.querySelectorAll(".cat-btn").forEach(b => {
+                b.classList.remove("active", "bg-[#ee4d2d]", "text-white", "border-[#ee4d2d]", "font-semibold");
+                b.classList.add("bg-white", "text-gray-700", "border-gray-200", "font-medium");
+            });
+
+            btn.classList.remove("bg-white", "text-gray-700", "border-gray-200", "font-medium");
+            btn.classList.add("active", "bg-[#ee4d2d]", "text-white", "border-[#ee4d2d]", "font-semibold");
+
+            currentCategory = btn.dataset.cat;
+            applyFilter();
+        });
+
+        loadMoreBtn.addEventListener("click", () => {
+            visibleCount += STEP;
+            renderProducts();
+        });
+
+        productGrid.addEventListener("click", (e) => {
+            const link = e.target.closest(".buy-btn");
+            if (link && link.getAttribute("href").includes("mock-")) {
+                e.preventDefault();
+                const prodNo = link.dataset.no;
+                showToast(`Simulasi klik tombol affiliate untuk Produk No. ${prodNo}`);
+            }
+        });
+
+        loadCatalog();
+    </script>
+</body>
+</html>
