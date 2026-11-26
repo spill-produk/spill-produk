@@ -1,0 +1,5 @@
+﻿*.xlsx
+*.py
+*.session
+config.json
+*.mp4
