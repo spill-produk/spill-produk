@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Spill Produk — Katalog Outfit & Racun Shopee</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛍️</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
@@ -28,11 +29,7 @@
       --radius-pill: 9999px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -44,23 +41,15 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Creator Bio Header */
     .hero {
       background: var(--blue);
       color: #FFFFFF;
       border-bottom: 3px solid var(--border);
       padding: 28px 16px 24px;
       text-align: center;
-      position: relative;
-      overflow: hidden;
     }
 
-    .hero-inner {
-      max-width: 680px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 2;
-    }
+    .hero-inner { max-width: 680px; margin: 0 auto; }
 
     .sticker-tag {
       display: inline-block;
@@ -82,19 +71,13 @@
       font-family: 'Fredoka', sans-serif;
       font-size: 26px;
       font-weight: 700;
-      letter-spacing: -0.01em;
       color: #FFFFFF;
       text-shadow: 2px 2px 0px var(--blue-ink);
       margin-bottom: 6px;
     }
 
-    .hero p {
-      font-size: 13.5px;
-      font-weight: 600;
-      color: #DBEAFE;
-    }
+    .hero p { font-size: 13.5px; font-weight: 600; color: #DBEAFE; }
 
-    /* Sticky Search & Filter Bar */
     .sticky-controls {
       position: sticky;
       top: 0;
@@ -114,19 +97,8 @@
       gap: 10px;
     }
 
-    .search-box {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 15px;
-      color: var(--blue-ink);
-      pointer-events: none;
-      display: flex;
-    }
+    .search-box { position: relative; display: flex; align-items: center; }
+    .search-icon { position: absolute; left: 15px; color: var(--blue-ink); pointer-events: none; display: flex; }
 
     .search-input {
       width: 100%;
@@ -140,19 +112,11 @@
       font-size: 14px;
       font-weight: 600;
       color: var(--text-primary);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
       outline: none;
     }
 
-    .search-input::placeholder {
-      color: #94A3B8;
-      font-weight: 500;
-    }
-
-    .search-input:focus {
-      transform: translate(-1px, -1px);
-      box-shadow: 4px 4px 0px var(--blue);
-    }
+    .search-input::placeholder { color: #94A3B8; font-weight: 500; }
+    .search-input:focus { transform: translate(-1px, -1px); box-shadow: 4px 4px 0px var(--blue); }
 
     .clear-btn {
       position: absolute;
@@ -169,17 +133,9 @@
       display: none;
       align-items: center;
       justify-content: center;
-      transition: background 0.15s;
     }
 
-    .clear-btn:hover {
-      background: var(--coral);
-      color: #FFFFFF;
-    }
-
-    .clear-btn.visible {
-      display: flex;
-    }
+    .clear-btn.visible { display: flex; }
 
     .filter-row {
       display: flex;
@@ -191,15 +147,8 @@
       padding-bottom: 2px;
     }
 
-    .filter-row::-webkit-scrollbar {
-      display: none;
-    }
-
-    .pills {
-      display: flex;
-      gap: 8px;
-      flex-shrink: 0;
-    }
+    .filter-row::-webkit-scrollbar { display: none; }
+    .pills { display: flex; gap: 8px; flex-shrink: 0; }
 
     .pill {
       padding: 6px 15px;
@@ -212,12 +161,7 @@
       font-weight: 600;
       cursor: pointer;
       box-shadow: 2px 2px 0px var(--border);
-      transition: all 0.15s ease;
       white-space: nowrap;
-    }
-
-    .pill:hover {
-      background: #DBEAFE;
     }
 
     .pill.active {
@@ -242,19 +186,8 @@
       flex-shrink: 0;
     }
 
-    /* Main Container */
-    .container {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 18px 16px 52px;
-    }
-
-    .status-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 14px;
-    }
+    .container { max-width: 1120px; margin: 0 auto; padding: 18px 16px 52px; }
+    .status-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
 
     .count-pill {
       display: inline-block;
@@ -268,28 +201,10 @@
       box-shadow: 2px 2px 0px var(--border);
     }
 
-    /* Product Grid: 2 Columns on Mobile, 4 on Desktop */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 13px;
-    }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
+    @media (min-width: 640px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; } }
+    @media (min-width: 960px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; } }
 
-    @media (min-width: 640px) {
-      .grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 18px;
-      }
-    }
-
-    @media (min-width: 960px) {
-      .grid {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 20px;
-      }
-    }
-
-    /* Retro Bento Card */
     .card {
       background: var(--card-bg);
       border-radius: var(--radius-lg);
@@ -301,10 +216,7 @@
       transition: transform 0.18s ease, box-shadow 0.18s ease;
     }
 
-    .card:hover {
-      transform: translate(-2px, -3px);
-      box-shadow: 6px 6px 0px var(--border);
-    }
+    .card:hover { transform: translate(-2px, -3px); box-shadow: 6px 6px 0px var(--border); }
 
     .thumb-wrap {
       position: relative;
@@ -315,17 +227,8 @@
       overflow: hidden;
     }
 
-    .thumb-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.3s ease;
-    }
-
-    .card:hover .thumb-wrap img {
-      transform: scale(1.04);
-    }
+    .thumb-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s ease; }
+    .card:hover .thumb-wrap img { transform: scale(1.04); }
 
     .thumb-placeholder {
       width: 100%;
@@ -352,24 +255,11 @@
       font-family: 'Fredoka', sans-serif;
       font-size: 12px;
       font-weight: 700;
-      letter-spacing: 0.02em;
       text-shadow: 1px 1px 0px var(--blue-ink);
     }
 
-    .card-body {
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      gap: 6px;
-      background: var(--surface);
-    }
-
-    @media (min-width: 640px) {
-      .card-body {
-        padding: 14px;
-      }
-    }
+    .card-body { padding: 12px; display: flex; flex-direction: column; flex: 1; gap: 6px; background: var(--surface); }
+    @media (min-width: 640px) { .card-body { padding: 14px; } }
 
     .cat-label {
       display: inline-block;
@@ -413,24 +303,12 @@
       font-family: 'Fredoka', sans-serif;
       font-size: 13px;
       font-weight: 600;
-      letter-spacing: 0.01em;
-      transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.1s ease;
     }
 
-    .buy-btn:hover {
-      background: var(--coral-hot);
-    }
+    .buy-btn:hover { background: var(--coral-hot); }
+    .buy-btn:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px var(--border); }
 
-    .buy-btn:active {
-      transform: translate(2px, 2px);
-      box-shadow: 0px 0px 0px var(--border);
-    }
-
-    /* Load More & Empty State */
-    .load-more-wrap {
-      margin-top: 30px;
-      text-align: center;
-    }
+    .load-more-wrap { margin-top: 30px; text-align: center; }
 
     .load-more-btn {
       padding: 12px 30px;
@@ -443,14 +321,9 @@
       font-weight: 700;
       box-shadow: var(--shadow-hard);
       cursor: pointer;
-      transition: all 0.15s ease;
     }
 
-    .load-more-btn:hover {
-      background: var(--coral);
-      color: #FFFFFF;
-      transform: translate(-1px, -2px);
-    }
+    .load-more-btn:hover { background: var(--coral); color: #FFFFFF; }
 
     .empty-state {
       text-align: center;
@@ -463,14 +336,8 @@
       display: none;
     }
 
-    .empty-state h3 {
-      font-family: 'Fredoka', sans-serif;
-      color: var(--blue-ink);
-      font-size: 18px;
-      margin-bottom: 6px;
-    }
+    .empty-state h3 { font-family: 'Fredoka', sans-serif; color: var(--blue-ink); font-size: 18px; margin-bottom: 6px; }
 
-    /* Back to Top Floating Button */
     .top-btn {
       position: fixed;
       bottom: 20px;
@@ -487,13 +354,6 @@
       align-items: center;
       justify-content: center;
       z-index: 40;
-      transition: transform 0.15s ease, background 0.15s ease;
-    }
-
-    .top-btn:hover {
-      background: var(--coral);
-      color: #FFFFFF;
-      transform: translate(-1px, -2px);
     }
   </style>
 </head>
@@ -516,13 +376,7 @@
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </span>
-        <input
-          type="text"
-          id="searchInput"
-          class="search-input"
-          placeholder="Cari nomor produk (misal: 2979) atau nama outfit..."
-          autocomplete="off"
-        />
+        <input type="text" id="searchInput" class="search-input" placeholder="Cari nomor produk (misal: 2979) atau nama outfit..." autocomplete="off" />
         <button type="button" id="clearBtn" class="clear-btn" aria-label="Hapus pencarian">&times;</button>
       </div>
 
@@ -588,12 +442,132 @@
     async function loadCatalog() {
       try {
         const res = await fetch('products.json?v=' + Date.now());
-        allProducts = await res.json();
+        if (!res.ok) {
+          throw new Error('HTTP ' + res.status + ' (products.json tidak ditemukan)');
+        }
+        const rawText = await res.text();
+        const safeText = rawText.replace(/\bNaN\b/g, 'null');
+        const parsed = JSON.parse(safeText);
+
+        if (!Array.isArray(parsed)) {
+          throw new Error('Format products.json tidak valid');
+        }
+
+        allProducts = parsed.map((item, idx) => ({
+          no: Number(item.no) || (idx + 1),
+          category: String(item.category || 'Lainnya'),
+          product_title: String(item.product_title || ('Produk #' + (item.no || idx + 1))),
+          product_image: String(item.product_image || ''),
+          affiliate_link: String(item.affiliate_link || '#')
+        }));
+
         applyFilters();
       } catch (err) {
-        countInfo.textContent = 'Gagal memuat products.json';
+        console.error('Detail error katalog:', err);
+        countInfo.textContent = 'Error: ' + err.message;
       }
     }
 
     function applyFilters() {
-      const query
+      const query = searchInput.value.trim().toLowerCase();
+      clearBtn.classList.toggle('visible', query.length > 0);
+
+      filteredProducts = allProducts.filter(item => {
+        const matchCat = currentCategory === 'Semua' || item.category === currentCategory;
+        if (!matchCat) return false;
+        if (!query) return true;
+        const noStr = String(item.no);
+        const titleStr = item.product_title.toLowerCase();
+        if (/^\d+$/.test(query)) return noStr === query || noStr.startsWith(query);
+        return noStr.includes(query) || titleStr.includes(query);
+      });
+
+      filteredProducts.sort((a, b) => {
+        if (/^\d+$/.test(query)) {
+          if (String(a.no) === query) return -1;
+          if (String(b.no) === query) return 1;
+        }
+        return currentSort === 'desc' ? (b.no - a.no) : (a.no - b.no);
+      });
+
+      visibleCount = PAGE_SIZE;
+      renderGrid();
+    }
+
+    function renderGrid() {
+      productGrid.innerHTML = '';
+      const total = filteredProducts.length;
+
+      if (total === 0) {
+        countInfo.textContent = '0 produk ditemukan';
+        emptyState.style.display = 'block';
+        loadMoreWrap.style.display = 'none';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+      const slice = filteredProducts.slice(0, visibleCount);
+      countInfo.textContent = `Menampilkan ${slice.length} dari ${total} produk`;
+
+      const fragment = document.createDocumentFragment();
+      slice.forEach(item => {
+        const card = document.createElement('article');
+        card.className = 'card';
+
+        const imgHtml = item.product_image
+          ? `<img src="${item.product_image}" alt="Produk #${item.no}" loading="lazy" onerror="this.outerHTML='<div class=\\'thumb-placeholder\\'>NO. ${item.no}</div>'" />`
+          : `<div class="thumb-placeholder">NO. ${item.no}</div>`;
+
+        card.innerHTML = `
+          <div class="thumb-wrap">
+            ${imgHtml}
+            <span class="no-badge">NO. ${item.no}</span>
+          </div>
+          <div class="card-body">
+            <span class="cat-label">${escapeHtml(item.category)}</span>
+            <h2 class="prod-title">${escapeHtml(item.product_title)}</h2>
+            <a href="${item.affiliate_link}" target="_blank" rel="noopener noreferrer" class="buy-btn">
+              Beli di Shopee
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </div>
+        `;
+        fragment.appendChild(card);
+      });
+
+      productGrid.appendChild(fragment);
+      loadMoreWrap.style.display = visibleCount < total ? 'block' : 'none';
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    searchInput.addEventListener('input', applyFilters);
+    clearBtn.addEventListener('click', () => { searchInput.value = ''; searchInput.focus(); applyFilters(); });
+
+    categoryPills.addEventListener('click', e => {
+      const btn = e.target.closest('.pill');
+      if (!btn) return;
+      document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      currentCategory = btn.dataset.cat;
+      applyFilters();
+    });
+
+    sortSelect.addEventListener('change', e => { currentSort = e.target.value; applyFilters(); });
+    loadMoreBtn.addEventListener('click', () => { visibleCount += PAGE_SIZE; renderGrid(); });
+    window.addEventListener('scroll', () => { topBtn.style.display = window.scrollY > 500 ? 'flex' : 'none'; });
+    topBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+    loadCatalog();
+  </script>
+</body>
+</html>
